@@ -1,0 +1,91 @@
+import java.util.*;
+
+public class WeightedGraph<E> {
+
+  
+    private final Map<E, Map<E, Integer>> adjList;
+
+    public WeightedGraph() {
+        adjList = new HashMap<>();
+    }
+
+ 
+    public void addVertex(E vertex) {
+        adjList.putIfAbsent(vertex, new HashMap<>());
+    }
+
+    public void addEdge(E src, E dest, int weight) {
+        adjList.putIfAbsent(src, new HashMap<>());
+        adjList.putIfAbsent(dest, new HashMap<>());
+        adjList.get(src).put(dest, weight);
+     
+    }
+
+    // get neighbors
+    public Map<E, Integer> getNeighbors(E vertex) {
+        return adjList.getOrDefault(vertex, new HashMap<>());
+    }
+
+
+    public void bfs(E start) {
+        Set<E> visited = new HashSet<>();
+        Queue<E> queue = new LinkedList<>();
+        queue.add(start);
+        visited.add(start);
+
+        System.out.print("BFS from " + start + ": ");
+        while (!queue.isEmpty()) {
+            E current = queue.poll();
+            System.out.print(current + " ");
+            for (E neighbor : getNeighbors(current).keySet()) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                }
+            }
+        }
+        System.out.println();
+    }
+
+
+    public void dfs(E start) {
+        Set<E> visited = new HashSet<>();
+        System.out.print("DFS from " + start + ": ");
+        dfsHelper(start, visited);
+        System.out.println();
+    }
+
+    private void dfsHelper(E vertex, Set<E> visited) {
+        if (visited.contains(vertex)) return;
+        visited.add(vertex);
+        System.out.print(vertex + " ");
+        for (E neighbor : getNeighbors(vertex).keySet()) {
+            dfsHelper(neighbor, visited);
+        }
+    }
+
+  
+    public boolean hasPath(E vertexStart, E vertexEnd) {
+        Set<E> visited = new HashSet<>();
+        return hasPathHelper(vertexStart, vertexEnd, visited);
+    }
+
+    private boolean hasPathHelper(E current, E target, Set<E> visited) {
+        if (current.equals(target)) return true;
+        visited.add(current);
+        for (E neighbor : getNeighbors(current).keySet()) {
+            if (!visited.contains(neighbor) && hasPathHelper(neighbor, target, visited)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
+    public void printGraph() {
+        System.out.println("Weighted Graph:");
+        for (E vertex : adjList.keySet()) {
+            System.out.println(vertex + " -> " + adjList.get(vertex));
+        }
+    }
+}
