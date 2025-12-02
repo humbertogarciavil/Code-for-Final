@@ -1,0 +1,42 @@
+public class Main {
+    public static void main(String[] args) {
+        WeightedGraph<String> graph = new WeightedGraph<>();
+
+        // Create vertices
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addVertex("E");
+
+        // Add weighted edges
+        graph.addEdge("A", "C", 12);
+        graph.addEdge("A", "D", 60);
+        graph.addEdge("B", "A", 10);
+        graph.addEdge("C", "B", 20);
+        graph.addEdge("C", "D", 32);
+        graph.addEdge("E", "A", 7);
+
+        // Show the graph
+        graph.printGraph();
+
+        System.out.println();
+
+        // Run BFS and DFS from A, C, and E
+        graph.bfs("A");
+        graph.dfs("A");
+
+        graph.bfs("C");
+        graph.dfs("C");
+
+        graph.bfs("E");
+        graph.dfs("E");
+
+        System.out.println();
+
+        // Check paths
+        System.out.println("Path E -> C? " + graph.hasPath("E", "C"));
+        System.out.println("Path B -> D? " + graph.hasPath("B", "D"));
+        System.out.println("Path A -> E? " + graph.hasPath("A", "E"));
+    }
+}
